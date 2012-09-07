@@ -1,0 +1,45 @@
+
+Wifisec is a tunnel proxy, which encrypts or decrypts HTTP requests/responses
+with SSL.
+When running in server mode, it also behaves like a cache server.
+
+This software is intended to provide security protection for portable devices,
+when access to internet via anonymous WiFi AP in public place.
+
+It's based on stunnel and polipo-1.0.4.
+
+The architecture is as following:
+
+                  HTTP               SSL+HTTP             HTTP
+     browser     <---->   wifisec   <-------->  wifisec  <----> WWW
+(chrome, firefox)        (client)               (server)
+
+
+##########################################################
+编译说明
+
+本软件在Ubuntu 12.04桌面环境下开发，内核版本为3.2.0-24-generic-pae。
+开发时使用的openSSL版本为1.0.1，gcc版本为4.6.3，make版本为3.81。
+
+源代码的组织（两个模块分别需要的源文件）参见Makefile。
+
+程序需要openssl的支持，开发者主机上使用的版本为1.0.1。
+开发者主机上默认链接选项里指定ssl安装路径为/usr/local/ssl，头文件在其下的include文件
+夹，库文件在其下的lib文件夹。
+如果ssl库和头文件安装路径在某个特定位置，编译时提示没找到相应头文件或库，请做相应
+修改。
+在程序的extra文件夹下，有开发者系统上的libssl.a，libcrypt.a，ssl.h。
+
+
+#######################################################
+运行使用说明
+
+程序的参数为filename或-help。
+wifisec [<filename>] | -help
+    <filename>  - use specified config file
+    -help           - get config file help
+当参数为-help时，程序会显示所有配置选项的简单说明，方便在忘记某个选项时进行查找。
+参数filename为配置文件的路径。如果不指定filename，默认为当前文件夹下的wifisec.conf。
+
+server运行在安全的机器上，作为client的代理。
+client运行于移动设备。浏览器的HTTP代理设置为client监听的端口。
